@@ -9,13 +9,6 @@ class BookingsDAO:
     database="bookings"
     )
 
-  def create(self, values):
-    cursor = self.db.cursor()
-    sql="insert into student (name, age) values (%s,%s)" 
-    cursor.execute(sql, values)
-    self.db.commit() 
-    return cursor.lastrowid
-
   def getAllRooms(self):
     cursor = self.db.cursor() 
     sql="select * from rooms" 
@@ -34,19 +27,25 @@ class BookingsDAO:
     result = cursor.fetchone() 
     return self.roomsDict(result)
 
-  def update(self, values):
+  def createRoom(self, values):
     cursor = self.db.cursor()
-    sql="update student set name= %s, age=%s where id = %s" 
+    sql="insert into rooms (name, colour) values (%s,%s)" 
+    cursor.execute(sql, values)
+    self.db.commit() 
+    return cursor.lastrowid  
+
+  def updateRoom(self, values):
+    cursor = self.db.cursor()
+    sql="update rooms set name= %s, colour=%s where id = %s" 
     cursor.execute(sql, values)
     self.db.commit()
 
-  def delete(self, id):
+  def deleteRoom(self, id):
     cursor = self.db.cursor()
-    sql="delete from student where id = %s"
+    sql="delete from rooms where id = %s"
     values = (id,) 
     cursor.execute(sql, values)
     self.db.commit() 
-    print("delete done")
 
   def getAllBookings(self):
     cursor = self.db.cursor() 
@@ -66,7 +65,26 @@ class BookingsDAO:
     result = cursor.fetchone() 
     return self.bookingsDict(result)
 
-    
+  def createBooking(self, values):
+    cursor = self.db.cursor()
+    sql="insert into bookings (roomID, dateRequired, userName, reason) values (%s,%s,%s,%s)" 
+    cursor.execute(sql, values)
+    self.db.commit() 
+    return cursor.lastrowid  
+
+  def updateBooking(self, values):
+    cursor = self.db.cursor()
+    sql="update bookings set roomID= %s, dateRequired=%s, userName=%s, reason=%s where id = %s" 
+    cursor.execute(sql, values)
+    self.db.commit()
+
+  def deleteBooking(self, id):
+    cursor = self.db.cursor()
+    sql="delete from bookings where id = %s"
+    values = (id,) 
+    cursor.execute(sql, values)
+    self.db.commit()  
+
   # convert rooms result to a dictionary
   def roomsDict(self,result):
     colnames = ['id', 'name','colour']
@@ -78,9 +96,9 @@ class BookingsDAO:
         item[colName] = value
     return item
 
-    # convert bookings result to a dictionary
+  # convert bookings result to a dictionary
   def bookingsDict(self,result):
-    colnames = ['id', 'dateRequired','roomID', 'userName', 'reason']
+    colnames = ['roomID','dateRequired','userName','reason', 'id']
     item ={}
     # check if there is a result, otherwise return empty {}
     if result:
