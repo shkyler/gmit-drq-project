@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, abort
 from flask_cors import CORS
+from bookingsDAO import bookingsDAO
 
 app = Flask(__name__, static_url_path='', static_folder='.')
 CORS(app)
@@ -21,15 +22,17 @@ bookings=[
 #curl "http://127.0.0.1:5000/rooms"
 @app.route('/rooms')
 def get_all_rooms():
-  return jsonify(rooms)
+  results = bookingsDAO.getAllRooms()
+  return jsonify(results)
 
 #curl "http://127.0.0.1:5000/rooms/2"
 @app.route('/rooms/<int:id>')
 def find_roomById(id):
-  foundRooms = list(filter(lambda t: t['id'] == id, rooms))
-  if len(foundRooms) == 0:
-      return jsonify ({}) , 204
-  return jsonify(foundRooms[0])
+  foundRoom = bookingsDAO.findRoomByID(id)
+  # check if the room exists
+  if not foundRoom:
+    abort(404)
+  return jsonify(foundRoom)
 
 #curl -i -H "Content-Type:application/json" -X POST -d '{"name":"The Purple Room", "colour":"purple"}' "http://127.0.0.1:5000/rooms"
 @app.route('/rooms', methods=['POST'])
@@ -74,15 +77,17 @@ def update_room(id):
 #curl "http://127.0.0.1:5000/bookings"
 @app.route('/bookings')
 def get_all_bookings():
-  return jsonify(bookings)
+  results = bookingsDAO.getAllBookings()
+  return jsonify(results)
 
 #curl "http://127.0.0.1:5000/bookings/1_171219"
 @app.route('/bookings/<string:id>')
 def find_bookingbyId(id):
-  foundBookings = list(filter(lambda t: t['id'] == id, bookings))
-  if len(foundBookings) == 0:
-      return jsonify ({}) , 204
-  return jsonify(foundBookings[0])
+  foundBooking = bookingsDAO.findBookingsByID(id)
+  # check if the booking exists
+  if not foundBooking:
+    abort(404)
+  return jsonify(foundBooking)
 
 #curl -i -H "Content-Type:application/json" -X POST -d '{"roomID": 2, "dateRequired":"171219", "userName":"Andrew Beatty", "reason":"Data Representation Lectures"}' "http://127.0.0.1:5000/bookings"
 @app.route('/bookings', methods=['POST'])
