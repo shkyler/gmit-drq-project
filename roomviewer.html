@@ -1,0 +1,223 @@
+<html>
+    <head>
+        <title> View Rooms</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+       
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <h1>Rooms</h1>
+        <div> <button id="showCreateButton" onclick="showCreate()">Create</button></div>
+        <div>
+            <table class="table" id="roomTable">
+                <tr>
+                        <th>Name</th>
+                        <th>Colour</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                </tr>
+                
+            </table>
+        </div>
+        <div id='createUpdateForm' style="display: none">
+                <h2><span id="createLabel">Create a</span> <span id="updateLabel">Update</span> Room</h2>
+                <input type="hidden" name="id"/>
+                Name <input type="text" name="name"> <br/>
+                Colour <input type="text" name="colour"/> <br/>
+
+                <span><button id="doCreateButton" onclick="doCreate()">Create</button></span>
+                <span><button id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+        </div>
+    </body>
+    <script>
+    function showCreate(){
+        document.getElementById('showCreateButton').style.display="none"
+        document.getElementById('roomTable').style.display="none"
+        document.getElementById('createUpdateForm').style.display="block"
+
+        document.getElementById('createLabel').style.display="inline"
+        document.getElementById('updateLabel').style.display="none"
+
+        document.getElementById('doCreateButton').style.display="block"
+        document.getElementById('doUpdateButton').style.display="none"
+
+    }
+    function showViewAll(){
+        document.getElementById('showCreateButton').style.display="block"
+        document.getElementById('roomTable').style.display="block"
+        document.getElementById('createUpdateForm').style.display="none"
+    }
+    function showUpdate(buttonElement){
+        document.getElementById('showCreateButton').style.display="none"
+        document.getElementById('roomTable').style.display="none"
+        document.getElementById('createUpdateForm').style.display="block"
+
+        document.getElementById('createLabel').style.display="none"
+        document.getElementById('updateLabel').style.display="inline"
+
+        document.getElementById('doCreateButton').style.display="none"
+        document.getElementById('doUpdateButton').style.display="block"
+
+
+        var rowElement = buttonElement.parentNode.parentNode
+        // these is a way of finding the closest <tr> which would safer, closest()
+        
+        var room = getRoomFromRow(rowElement)
+        populateFormWithRoom(room)
+    }
+    function doCreate(){
+        var form = document.getElementById('createUpdateForm')
+
+        var room = {}
+        room.name = form.querySelector('input[name="name"]').value
+        room.colour = form.querySelector('input[name="colour"]').value
+        console.log(JSON.stringify(room))
+        createRoomAjax(room)
+    }
+    function doUpdate(){
+        var room = getRoomFromForm();
+        var rowElement = document.getElementById(room.id);
+        updateRoomAjax(room);
+        setRoomInRow(rowElement,room);
+       
+        clearForm();
+        showViewAll();
+    }
+    function doDelete(r){
+        var tableElement = document.getElementById('roomTable');
+        var rowElement = r.parentNode.parentNode;
+        var index = rowElement.rowIndex;
+        deleteRoomAjax(rowElement.getAttribute("id"));
+        tableElement.deleteRow(index);
+    }
+    function addRoomToTable(room){
+        var tableElement = document.getElementById('roomTable')
+        var rowElement = tableElement.insertRow(-1)
+        rowElement.setAttribute('id',room.id)
+        var cell1 = rowElement.insertCell(0);
+        cell1.innerHTML = room.name
+        var cell2 = rowElement.insertCell(1);
+        cell2.innerHTML = room.colour
+        var cell3 = rowElement.insertCell(2);
+        cell3.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+        var cell4 = rowElement.insertCell(3);
+        cell4.innerHTML = '<button onclick=doDelete(this)>Delete</button>'
+
+    }
+
+    function clearForm(){
+        var form = document.getElementById('createUpdateForm')
+
+        form.querySelector('input[name="name"]').value=''
+        form.querySelector('input[name="colour"]').value=''
+
+    }
+    function getRoomFromRow(rowElement){
+        var room ={}
+        room.id  = rowElement.getAttribute('id')
+        room.name = rowElement.cells[0].firstChild.textContent
+        room.colour = rowElement.cells[1].firstChild.textContent
+        return room
+    }
+    function setRoomInRow(rowElement, room){
+        rowElement.cells[0].firstChild.textContent= room.name 
+        rowElement.cells[1].firstChild.textContent= room.colour
+
+    }
+    function populateFormWithRoom(room){
+        var form = document.getElementById('createUpdateForm')
+        form.querySelector('input[name="id"]').disabled = true
+        form.querySelector('input[name="id"]').value  = room.id
+        form.querySelector('input[name="name"]').value= room.name
+        form.querySelector('input[name="colour"]').value= room.colour
+        return room
+    }
+    function getRoomFromForm(){
+        var form = document.getElementById('createUpdateForm')
+        var room = {}
+        room.id = form.querySelector('input[name="id"]').value
+        room.name = form.querySelector('input[name="name"]').value
+        room.colour = form.querySelector('input[name="colour"]').value
+        console.log(JSON.stringify(room))
+        return room
+    }
+    function getAllAjax(){
+        $.ajax({
+            "url": "http://127.0.0.1:5000/rooms",
+            "method":"GET",
+            "data":"",
+            "dataType": "JSON",
+            "success":function(result){
+                //console.log(result);
+                for (room of result){
+                    addRoomToTable(room);
+                }
+                
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+
+    }
+    function createRoomAjax(room){
+        console.log(JSON.stringify(room));
+        $.ajax({
+            "url": "http://127.0.0.1:5000/rooms",
+            "method":"POST",
+            "data":JSON.stringify(room),
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+                //console.log(result);
+                room.id = result.id;
+                addRoomToTable(room) 
+                clearForm()
+                showViewAll()
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+    function updateRoomAjax(room){
+       
+        console.log(JSON.stringify(room));
+        $.ajax({
+            "url": "http://127.0.0.1:5000/rooms/"+encodeURI(room.id),
+            "method":"PUT",
+            "data":JSON.stringify(room),
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+               // console.log(result);
+                  
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+    function deleteRoomAjax(id){
+        console.log(JSON.stringify(room));
+        $.ajax({
+            "url": "http://127.0.0.1:5000/rooms/"+encodeURI(id),
+            "method":"DELETE",
+            "data":"",
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+                //console.log(result);
+                  
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+    getAllAjax();
+  
+
+    
+    </script>
+</html>
