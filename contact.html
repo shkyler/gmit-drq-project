@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>The Clothes Line</title>
+  <!-- Use the meta tags to tell the browser which character set to use, and how to scate the webpage acoss devices-->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, intial-scale=1">
+</head>
+<style>
+  /* Set the font family */
+  body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin:0;
+  }
+  .header{
+    /*Define the styling for the header class*/
+    padding: 40px;
+    text-align: center;
+    background:#3333cc;
+    color: white;
+  }
+  .header h1{
+    /*Change the h1 font size in the header*/
+    font-size: 40px;
+  }
+  #tshirt{
+    /*position the tshirt icon left*/
+    float:left;
+  }
+  #jeans{
+    /*position the jeans icon right*/
+    float:right;
+  }
+  .navigation{
+    /*hide over flow, and pick colour*/
+    overflow: hidden;
+    background-color: #3333cc;
+  }
+  .navigation a{
+    /*style the links in the navigation bar*/
+    float:left;
+    display:block;
+    padding: 16px 30px;
+    color: white;
+    /*remove underline from links*/
+    text-decoration: none; 
+  }
+  .navigation a.right{
+    /*move the last link to the right of the screen*/
+    float:right;
+  }
+  .navigation a:hover{
+    /*invert the colours in of the links on mouse hover*/
+    background-color: white;
+    color:#3333cc;
+  }
+  .footer{
+    /*Define the styling for the footer class*/
+    padding: 40px;
+    text-align: center;
+    background:#3333cc;
+    color: white;
+  }
+  #sub_head{
+    /*change the font size for the sub heading*/
+    font-size:12px;
+  }
+  /*define the default styling for the buttons*/
+#button {
+  background-color: #3333cc;
+  border: none;
+  color: white;
+  width:150px;
+  height:60px;
+  margin:2px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  align-self: center;
+}
+/*define the default styling for the button on hover*/
+#button:hover{
+  color: #3333cc;  
+  background-color: white;
+}
+</style> 
+
+<body>
+  <!--Use a div to define a header - this will be styled using CSS (.header)-->
+  <div class="header">
+    <img id="tshirt" src="img/icons/tshirt-icon.png", width="150px">
+    <img id="jeans" src="img/icons/jeans-icon.png", width="150px">
+    <h1>The Clothes Line</h1>
+    <p id="sub_head">A modern, online retail experience for hip young urbanites.</p>
+    
+  </div>
+  <div class="navigation">
+      <a href="home.html">Jeans</a>
+      <a href="shirts.html">Shirts</a>
+      <a href="dresses.html">Dresses</a>
+      <a href="compare.html">Compare Products</a>
+      <a href="sales.html">View Sales</a>
+      <a href="about.html">About Us</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="login.html" class="right">Log In</a>
+  </div>  
+  <div style="background-color: lightgray; margin: 100px;padding:30px; font-size:15px"> 
+    <!--Style the form-->
+      <div style="float:right">
+          <h3>Query Details: </h3><br>
+          <textarea cols="70" rows="20">
+          Please type your query details here...
+          </textarea>  
+        </div>
+    
+    <h3>Contact Us</h3>
+    <p>Please submit all enquiries using the form below:</p>
+    <form>
+      <!--Add the elements for the form-->
+        <b>First Name:</b> <br>
+        <input id="fname" style="margin-top:3px;margin:3px" required/> <br>
+        <b>Last Name:</b><br>
+        <input id="lname" style="margin-top:3px;margin:3px" required/><br>
+        <b>Email Address:</b><br>
+        <input id="email_add" type="email" style="margin-top:3px;margin:3px" required/><br>
+        <b>Phone Number:</b><br>
+        <input id="phone_no"type="number" length="16" style="margin-top:3px;margin:3px" required/><br>
+        <b>Date of Birth: </b><br>
+        <input id="DOB "type="date" style="margin-top:3px;margin:3px"required/><br>
+        <b>Gender:</b><br>
+        <input type="radio" name="gender" value="Male" style="margin-top:5px;margin:5px"> Male<br>  
+        <input type="radio" name="gender" value="Female" style="margin-top:5px;margin:5px"> Female<br> 
+        <input id="button" type="submit" onclick="submission()" value="Submit Query" style="margin-left: 400px"> 
+    </form>  
+  </div>
+  
+
+  </p>  
+  <div class="footer">
+  </div>  
+
+</body>   
+<script>
+// create a function to action the submit button  
+function submission(){
+  // store the information in variables
+  var first_name = document.getElementById("fname").value
+  var last_name = document.getElementById("lname").value
+  var email = document.getElementById("email_add").value
+  //acknowledge the query with an alert
+  alert("Hi " + first_name + " " + last_name + ", thanks for the query, we will reply at " + email)
+}
+
+</script>
+</html>  

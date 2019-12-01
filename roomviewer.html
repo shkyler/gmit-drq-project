@@ -1,13 +1,84 @@
 <html>
     <head>
-        <title> View Rooms</title>
+        <title>GMIT Room Booking</title>
+        <!-- Use the meta tags to tell the browser which character set to use, and how to scale the webpage acoss devices-->
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, intial-scale=1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
        
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
+    <style>
+            /* Set the font family */
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            margin:0;
+            }
+        .header{
+            /*Define the styling for the header class*/
+            padding: 60px;
+            text-align: center;
+            background:#3333cc;
+            color: white;
+            }
+        #gmit_logo{
+            /*position the GMIT icon left*/
+            float:right;
+            }     
+        .navigation{
+            /*hide over flow, and pick colour*/
+            overflow: hidden;
+            background-color: #3333cc;
+            }
+        .navigation a{
+            /*style the links in the navigation bar*/
+            float:left;
+            display:block;
+            padding: 16px 30px;
+            color: white;
+            /*remove underline from links*/
+            text-decoration: none; 
+            }   
+        .navigation a:hover{
+            /*invert the colours in of the links on mouse hover*/
+            background-color: white;
+            color:#3333cc;    
+        }
+        /*define the default styling for the buttons*/
+        .button {
+            background-color: #3333cc;
+            border: none;
+            color: white;
+            width:150px;
+            height:60px;
+            margin:2px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            align-self: center;
+            }
+        /*define the default styling for the button on hover*/
+        .button:hover{
+            color: #3333cc;  
+            background-color: white;
+            } 
+            
+                    
+    </style>    
     <body>
-        <h1>Rooms</h1>
-        <div> <button id="showCreateButton" onclick="showCreate()">Create</button></div>
+          <!--Use a div to define a header - this will be styled using CSS (.header)-->
+        <div class="header">
+            <h1>GMIT Room Booking System</h1>
+        </div>
+        <div class="navigation">
+                <a href="bookings.html">Book a Room</a>
+                <a href="roomviewer.html">Manage Rooms</a>
+
+        </div>
+        <div  style="padding:20px">
+        <h1 style="color:#3333cc">Manage Rooms</h1>
+        <div> <button id="showCreateButton" class="button" onclick="showCreate()">Create a Room</button></div>
         <div>
             <table class="table" id="roomTable">
                 <tr>
@@ -20,13 +91,16 @@
             </table>
         </div>
         <div id='createUpdateForm' style="display: none">
-                <h2><span id="createLabel">Create a</span> <span id="updateLabel">Update</span> Room</h2>
+                <h2><span style="color:#3333cc"id="createLabel">Create a New</span> <span style="color: #3333cc"id="updateLabel">Update an Existing</span> <span style="color: #3333cc"> Room</span></h2>
                 <input type="hidden" name="id"/>
-                Name <input type="text" name="name"> <br/>
-                Colour <input type="text" name="colour"/> <br/>
-
-                <span><button id="doCreateButton" onclick="doCreate()">Create</button></span>
-                <span><button id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+                <b>Name:</b><br/> 
+                <input type="text" name="name"> <br/>
+                <b>Colour:</b><br/> 
+                <input type="text" name="colour"/> <br/>
+                <br/>
+                <span><button style="background-color: #3333cc;border: none;color: white; width:120px; height:50px;margin:2px" id="doCreateButton" onclick="doCreate()">Create</button></span>
+                <span><button style="background-color: #3333cc;border: none;color: white; width:120px; height:50px;margin:2px" id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+        </div>
         </div>
     </body>
     <script>
@@ -73,13 +147,14 @@
         room.colour = form.querySelector('input[name="colour"]').value
         console.log(JSON.stringify(room))
         createRoomAjax(room)
+        clearForm()
+        showViewAll();
     }
     function doUpdate(){
         var room = getRoomFromForm();
         var rowElement = document.getElementById(room.id);
         updateRoomAjax(room);
         setRoomInRow(rowElement,room);
-       
         clearForm();
         showViewAll();
     }
@@ -99,9 +174,9 @@
         var cell2 = rowElement.insertCell(1);
         cell2.innerHTML = room.colour
         var cell3 = rowElement.insertCell(2);
-        cell3.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+        cell3.innerHTML = '<button class="button" onclick="showUpdate(this)">Update</button>'
         var cell4 = rowElement.insertCell(3);
-        cell4.innerHTML = '<button onclick=doDelete(this)>Delete</button>'
+        cell4.innerHTML = '<button class="button" onclick=doDelete(this)>Delete</button>'
 
     }
 
@@ -148,7 +223,7 @@
             "data":"",
             "dataType": "JSON",
             "success":function(result){
-                //console.log(result);
+                console.log(result);
                 for (room of result){
                     addRoomToTable(room);
                 }
@@ -156,6 +231,9 @@
             },
             "error":function(xhr,status,error){
                 console.log("error: "+status+" msg:"+error);
+                alert("Something went wrong: "+error);
+                // reload the page from the server if the ajax call fails
+                window.location.reload(true);
             }
         });
 
@@ -169,7 +247,7 @@
             "dataType": "JSON",
             contentType: "application/json; charset=utf-8",
             "success":function(result){
-                //console.log(result);
+                console.log(result);
                 room.id = result.id;
                 addRoomToTable(room) 
                 clearForm()
@@ -177,6 +255,9 @@
             },
             "error":function(xhr,status,error){
                 console.log("error: "+status+" msg:"+error);
+                alert("Something went wrong: "+error);
+                // reload the page from the server if the ajax call fails
+                window.location.reload(true);
             }
         });
     }
@@ -190,11 +271,13 @@
             "dataType": "JSON",
             contentType: "application/json; charset=utf-8",
             "success":function(result){
-               // console.log(result);
-                  
+                console.log(result);    
             },
             "error":function(xhr,status,error){
                 console.log("error: "+status+" msg:"+error);
+                alert("Something went wrong: "+error);
+                // reload the page from the server if the ajax call fails
+                window.location.reload(true);
             }
         });
     }
@@ -207,11 +290,14 @@
             "dataType": "JSON",
             contentType: "application/json; charset=utf-8",
             "success":function(result){
-                //console.log(result);
+                console.log(result);
                   
             },
             "error":function(xhr,status,error){
                 console.log("error: "+status+" msg:"+error);
+                alert("Something went wrong: "+error);
+                // reload the page from the server if the ajax call fails
+                window.location.reload(true);
             }
         });
     }

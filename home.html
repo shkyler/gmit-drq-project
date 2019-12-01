@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>The Clothes Line</title>
+  <!-- Use the meta tags to tell the browser which character set to use, and how to scate the webpage acoss devices-->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, intial-scale=1">
+</head>
+<style>
+  /* Set the font family */
+  body{
+    font-family: Arial, Helvetica, sans-serif;
+    margin:0;
+  }
+  .header{
+    /*Define the styling for the header class*/
+    padding: 40px;
+    text-align: center;
+    background:#3333cc;
+    color: white;
+  }
+  .header h1{
+    /*Change the h1 font size in the header*/
+    font-size: 40px;
+  }
+  #tshirt{
+    /*position the tshirt icon left*/
+    float:left;
+  }
+  #jeans{
+    /*position the jeans icon right*/
+    float:right;
+  }
+  .navigation{
+    /*hide over flow, and pick colour*/
+    overflow: hidden;
+    background-color: #3333cc;
+  }
+  .navigation a{
+    /*style the links in the navigation bar*/
+    float:left;
+    display:block;
+    padding: 16px 30px;
+    color: white;
+    /*remove underline from links*/
+    text-decoration: none; 
+  }
+  .navigation a.right{
+    /*move the last link to the right of the screen*/
+    float:right;
+  }
+  .navigation a:hover{
+    /*invert the colours in of the links on mouse hover*/
+    background-color: white;
+    color:#3333cc;
+  }
+  .footer{
+    /*Define the styling for the footer class*/
+    padding: 40px;
+    text-align: center;
+    background:#3333cc;
+    color: white;
+    margin:0;
+  }
+
+  #sub_head{
+  /*change the font size for the sub heading*/
+    font-size:12px;
+  }
+/* Ensure proper sizing */
+* {
+  box-sizing: border-box;
+}
+  .row{
+    display: flex;
+    flex-wrap: wrap;
+    margin:0;
+  }
+
+/* Create two unequal columns that sits next to each other */
+/* Sidebar/left column */
+.side {
+  flex: 20%; /* Set the width of the sidebar */
+  background-color: white; /* Grey background color */
+  padding: 20px; /* Some padding */
+}
+/* Main column */
+.main {
+  flex: 80%; /* Set the width of the main content */
+  background-color: white; /* White background color */
+  padding: 20px; /* Some padding */
+}
+/*define the default styling for the product card*/
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial,Arial, Helvetica, sans-serif;
+}
+/*define the default styling for the product card price*/
+.price {
+  color: grey;
+  font-size: 22px;
+}
+/*define the default styling for the buttons*/
+#button {
+  background-color: #3333cc;
+  border: none;
+  color: white;
+  width:150px;
+  height:60px;
+  margin:2px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  align-self: center;
+}
+/*define the default styling for the button on hover*/
+#button:hover{
+  color: #3333cc;  
+  background-color: white;
+}
+</style> 
+
+<body>
+  <!--Use a div to define a header - this will be styled using CSS (.header)-->
+  <div class="header">
+    <img id="tshirt" src="img/icons/tshirt-icon.png", width="150px">
+    <img id="jeans" src="img/icons/jeans-icon.png", width="150px">
+    <h1>The Clothes Line</h1>
+    <p id="sub_head">A modern, online retail experience for hip young urbanites.</p>
+    
+  </div>
+  <div class="navigation">
+    <a href="home.html">Jeans</a>
+    <a href="shirts.html">Shirts</a>
+    <a href="dresses.html">Dresses</a>
+    <a href="compare.html">Compare Products</a>
+    <a href="sales.html">View Sales</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact Us</a>
+    <a href="login.html" class="right">Log In</a>
+  </div>  
+  <p id="main_page">
+      <!--Divide the main body into a side panel and a main panel-->
+    <div class="row">
+        <div class="side">
+          <!--Add 4 buttons to the side panel, each button calls a different function when clicked-->
+          <h3 style="align-self:centre">View our Jeans</h3>
+          <button id="button" onclick="skinny()">Skinny Jeans</button><br>
+          <button id="button" onclick="flares()">Flares</button><br>  
+          <button id="button" onclick="work()">Work Wear</button><br> 
+          <button id="button" onclick="black()">Black Jeans</button><br>   
+        </div>
+
+        <div class="main">
+          <!--Add a product card to display a product, the content of this is variable using the DOM-->
+            <div class="card">
+              <img id="card_img"src="img/products/jeans1.jpg" alt="Skinny Jeans" style="width:50%" width="50px">
+              <h1 id="card_head">Skinny Jeans</h1>
+              <p id="card_price"class="price">€19.99</p>
+              <p id="card_desc">Skinny Jeans for Men, available in Size: S,M,L,XL</p>
+            </div>  
+        </div>
+    </div>
+  
+  </p>  
+  <div class="footer">
+  </div>  
+
+</body>   
+<script>
+function flares(){
+    // change the styling and content of the product card
+  document.getElementById("card_img").src = "img/products/jeans2.jpg";
+  document.getElementById("card_head").innerHTML = "Flared Jeans";
+  document.getElementById("card_price").innerHTML = "€24.99";
+  document.getElementById("card_desc").innerHTML = "Flared Jeans for Women, available in Size: S,M,L,XL";
+  document.getElementById("card_price").style.color = "grey";
+  }
+function skinny(){
+    // change the styling and content of the product card
+  document.getElementById("card_img").src = "img/products/jeans1.jpg";
+  document.getElementById("card_head").innerHTML = "Skinny Jeans";
+  document.getElementById("card_price").innerHTML = "€19.99";
+  document.getElementById("card_desc").innerHTML = "Skinny Jeans for Men, available in Size: S,M,L,XL";
+  document.getElementById("card_price").style.color = "grey";
+  }
+  function work(){
+    // change the styling and content of the product card
+  document.getElementById("card_img").src = "img/products/jeans3.jpg"
+  document.getElementById("card_head").innerHTML = "Work Wear Jeans";
+  document.getElementById("card_price").innerHTML = "€49.99"
+  document.getElementById("card_desc").innerHTML = "Rugged Work Jeans for Men, available in Size: M,L,XL, XXL"
+  document.getElementById("card_price").style.color = "red";
+  }  
+  function black(){
+    // change the styling and content of the product card
+  document.getElementById("card_img").src = "img/products/jeans4.jpg"
+  document.getElementById("card_head").innerHTML = "Black Jeans";
+  document.getElementById("card_price").innerHTML = "€34.99"
+  document.getElementById("card_desc").innerHTML = "Black Comfort Fit Jeans for Men or Women, available in Size: XS, S, M,L,XL, XXL"
+  document.getElementById("card_price").style.color = "grey";
+  }  
+
+</script>
+
+
+</html>  
