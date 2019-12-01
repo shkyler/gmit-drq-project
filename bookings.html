@@ -1,0 +1,241 @@
+<html>
+    <head>
+        <title> View Bookings</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+       
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <h1>Bookings</h1>
+        <div> <button id="showCreateButton" onclick="showCreate()">Create</button></div>
+        <div>
+            <table class="table" id="bookingTable">
+                <tr>
+                        <th>Room Number</th>
+                        <th>Date Required</th>
+                        <th>Booked By</th>
+                        <th>Reason for Booking</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                </tr>
+                
+            </table>
+        </div>
+        <div id='createUpdateForm' style="display: none">
+                <h2><span id="createLabel">Create a</span> <span id="updateLabel">Update</span> Booking</h2>
+                <input type="hidden" name="id"/>
+                Room Number <input type="text" name="roomID"> <br/>
+                Date Required <input type="text" name="dateRequired"/> <br/>
+                Booked By <input type="text" name="userName"/> <br/>
+                Reason for Booking <input type="text" name="reason"/> <br/>    
+                <span><button id="doCreateButton" onclick="doCreate()">Create</button></span>
+                <span><button id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+        </div>
+    </body>
+    <script>
+    function showCreate(){
+        document.getElementById('showCreateButton').style.display="none"
+        document.getElementById('bookingTable').style.display="none"
+        document.getElementById('createUpdateForm').style.display="block"
+
+        document.getElementById('createLabel').style.display="inline"
+        document.getElementById('updateLabel').style.display="none"
+
+        document.getElementById('doCreateButton').style.display="block"
+        document.getElementById('doUpdateButton').style.display="none"
+
+    }
+    function showViewAll(){
+        document.getElementById('showCreateButton').style.display="block"
+        document.getElementById('bookingTable').style.display="block"
+        document.getElementById('createUpdateForm').style.display="none"
+    }
+    function showUpdate(buttonElement){
+        document.getElementById('showCreateButton').style.display="none"
+        document.getElementById('bookingTable').style.display="none"
+        document.getElementById('createUpdateForm').style.display="block"
+
+        document.getElementById('createLabel').style.display="none"
+        document.getElementById('updateLabel').style.display="inline"
+
+        document.getElementById('doCreateButton').style.display="none"
+        document.getElementById('doUpdateButton').style.display="block"
+
+
+        var rowElement = buttonElement.parentNode.parentNode
+        // these is a way of finding the closest <tr> which would safer, closest()
+        
+        var booking = getBookingFromRow(rowElement)
+        populateFormWithBooking(booking)
+    }
+    function doCreate(){
+        var form = document.getElementById('createUpdateForm')
+
+        var booking = {}
+        booking.roomID = form.querySelector('input[name="roomID"]').value
+        booking.dateRequired = form.querySelector('input[name="dateRequired"]').value
+        booking.userName = form.querySelector('input[name="userName"]').value
+        booking.reason = form.querySelector('input[name="reason"]').value    
+        console.log(JSON.stringify(booking))
+        createBookingAjax(booking)
+    }
+    function doUpdate(){
+        var booking = getBookingFromForm();
+        var rowElement = document.getElementById(booking.id);
+        updateBookingAjax(booking);
+        setBookingInRow(rowElement,booking);
+       
+        clearForm();
+        showViewAll();
+    }
+    function doDelete(r){
+        var tableElement = document.getElementById('bookingTable');
+        var rowElement = r.parentNode.parentNode;
+        var index = rowElement.rowIndex;
+        deleteBookingAjax(rowElement.getAttribute("id"));
+        tableElement.deleteRow(index);
+    }
+    function addBookingToTable(booking){
+        var tableElement = document.getElementById('bookingTable')
+        var rowElement = tableElement.insertRow(-1)
+        rowElement.setAttribute('id',booking.id)
+        var cell1 = rowElement.insertCell(0);
+        cell1.innerHTML = booking.roomID
+        var cell2 = rowElement.insertCell(1);
+        cell2.innerHTML = booking.dateRequired
+        var cell3 = rowElement.insertCell(2);
+        cell3.innerHTML = booking.userName    
+        var cell4 = rowElement.insertCell(3);
+        cell4.innerHTML = booking.reason 
+        var cell5 = rowElement.insertCell(4);
+        cell5.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+        var cell6 = rowElement.insertCell(5);
+        cell6.innerHTML = '<button onclick=doDelete(this)>Delete</button>'
+
+    }
+
+    function clearForm(){
+        var form = document.getElementById('createUpdateForm')
+
+        form.querySelector('input[name="roomID"]').value=''
+        form.querySelector('input[name="dateRequired"]').value=''
+        form.querySelector('input[name="userName"]').value=''
+        form.querySelector('input[name="reason"]').value=''
+
+    }
+    function getBookingFromRow(rowElement){
+        var booking ={}
+        booking.id  = rowElement.getAttribute('id')
+        booking.roomID = rowElement.cells[0].firstChild.textContent
+        booking.dateRequired = rowElement.cells[1].firstChild.textContent
+        booking.userName = rowElement.cells[2].firstChild.textContent
+        booking.reason = rowElement.cells[3].firstChild.textContent
+        return booking
+    }
+    function setBookingInRow(rowElement, booking){
+        rowElement.cells[0].firstChild.textContent= booking.roomID 
+        rowElement.cells[1].firstChild.textContent= booking.dateRequired
+        rowElement.cells[2].firstChild.textContent= booking.userName
+        rowElement.cells[3].firstChild.textContent= booking.reason
+    }
+    function populateFormWithBooking(booking){
+        var form = document.getElementById('createUpdateForm')
+        form.querySelector('input[name="id"]').disabled = true
+        form.querySelector('input[name="id"]').value  = booking.id
+        form.querySelector('input[name="roomID"]').value= booking.roomID
+        form.querySelector('input[name="dateRequired"]').value= booking.dateRequired
+        form.querySelector('input[name="userName"]').value= booking.userName
+        form.querySelector('input[name="reason"]').value= booking.reason
+        return booking
+    }
+    function getBookingFromForm(){
+        var form = document.getElementById('createUpdateForm')
+        var booking = {}
+        booking.id = form.querySelector('input[name="id"]').value
+        booking.roomID = form.querySelector('input[name="roomID"]').value
+        booking.dateRequired = form.querySelector('input[name="dateRequired"]').value
+        booking.userName = form.querySelector('input[name="userName"]').value
+        booking.reason = form.querySelector('input[name="reason"]').value
+        console.log(JSON.stringify(booking))
+        return booking
+    }
+    function getAllAjax(){
+        $.ajax({
+            "url": "http://127.0.0.1:5000/bookings",
+            "method":"GET",
+            "data":"",
+            "dataType": "JSON",
+            "success":function(result){
+                //console.log(result);
+                for (booking of result){
+                    addBookingToTable(booking);
+                }
+                
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+
+    }
+    function createBookingAjax(booking){
+        console.log(JSON.stringify(booking));
+        $.ajax({
+            "url": "http://127.0.0.1:5000/bookings",
+            "method":"POST",
+            "data":JSON.stringify(booking),
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+               
+                booking.id = result.id;
+                addBookingToTable(booking) 
+                clearForm()
+                showViewAll()
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+    function updateBookingAjax(booking){
+       
+        console.log(JSON.stringify(booking));
+        $.ajax({
+            "url": "http://127.0.0.1:5000/bookings/"+encodeURI(booking.id),
+            "method":"PUT",
+            "data":JSON.stringify(booking),
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+               // console.log(result);
+                  
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+    function deleteBookingAjax(id){
+        console.log(JSON.stringify(booking));
+        $.ajax({
+            "url": "http://127.0.0.1:5000/bookings/"+encodeURI(id),
+            "method":"DELETE",
+            "data":"",
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+                //console.log(result);
+                  
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+    getAllAjax();
+  
+
+    
+    </script>
+</html>

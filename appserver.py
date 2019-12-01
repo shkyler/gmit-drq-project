@@ -108,7 +108,7 @@ def update_booking(id):
     abort(400)
   reqJson = request.json  
   # validate the JSON
-  if 'roomID' in reqJson and type(reqJson['roomID']) != int:
+  if 'roomID' in reqJson and type(reqJson['roomID']) != str:
     abort(400)
   if 'dateRequired' in reqJson and type(reqJson['dateRequired']) is not str:
     abort(400)
