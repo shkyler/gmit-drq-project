@@ -234,9 +234,8 @@
         console.log(JSON.stringify(booking))
         return booking
     }
-    
+    host = window.location.origin
     function getAllAjax(){
-        host = window.location.origin
         $.ajax({
             "url": host + "/bookings",
             "method":"GET",
@@ -259,7 +258,6 @@
 
     }
     function createBookingAjax(booking){
-        host = window.location.origin
         console.log(JSON.stringify(booking));
         $.ajax({
             "url": host + "/bookings",
@@ -283,7 +281,7 @@
         });
     }
     function updateBookingAjax(booking){
-        host = window.location.origin
+       
         console.log(JSON.stringify(booking));
         $.ajax({
             "url": host + "/bookings/"+encodeURI(booking.id),
@@ -305,7 +303,6 @@
         });
     }
     function deleteBookingAjax(id){
-        host = window.location.origin
         console.log(JSON.stringify(booking));
         $.ajax({
             "url": host + "/bookings/"+encodeURI(id),
