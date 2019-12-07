@@ -1,12 +1,15 @@
 import mysql.connector 
+import dbconfig as cfg
+
+
 class BookingsDAO:
   db=""
   def __init__(self):
     self.db = mysql.connector.connect( 
-    host="localhost",
-    user="root",
-    password="root",
-    database="bookings"
+    host=cfg.mysql['host'],
+    user=cfg.mysql['username'],
+    password=cfg.mysql['password'],
+    database=cfg.mysql['database']
     )
 
   def getAllRooms(self):

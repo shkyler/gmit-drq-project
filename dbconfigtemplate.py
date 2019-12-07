@@ -1,0 +1,6 @@
+mysql = {
+  'host':'',
+  'username':'',
+  'password':'',
+  'database':''
+}
