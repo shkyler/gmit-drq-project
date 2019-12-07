@@ -219,9 +219,10 @@
         console.log(JSON.stringify(room))
         return room
     }
+    host = window.location.origin
     function getAllAjax(){
         $.ajax({
-            "url": "http://127.0.0.1:5000/rooms",
+            "url": host + "/rooms",
             "method":"GET",
             "data":"",
             "dataType": "JSON",
@@ -244,7 +245,7 @@
     function createRoomAjax(room){
         console.log(JSON.stringify(room));
         $.ajax({
-            "url": "http://127.0.0.1:5000/rooms",
+            "url": host + "/rooms",
             "method":"POST",
             "data":JSON.stringify(room),
             "dataType": "JSON",
@@ -268,7 +269,7 @@
        
         console.log(JSON.stringify(room));
         $.ajax({
-            "url": "http://127.0.0.1:5000/rooms/"+encodeURI(room.id),
+            "url": host + "/rooms/"+encodeURI(room.id),
             "method":"PUT",
             "data":JSON.stringify(room),
             "dataType": "JSON",
@@ -287,7 +288,7 @@
     function deleteRoomAjax(id){
         console.log(JSON.stringify(room));
         $.ajax({
-            "url": "http://127.0.0.1:5000/rooms/"+encodeURI(id),
+            "url": host + "/rooms/"+encodeURI(id),
             "method":"DELETE",
             "data":"",
             "dataType": "JSON",

@@ -234,9 +234,10 @@
         console.log(JSON.stringify(booking))
         return booking
     }
+    host = window.location.origin
     function getAllAjax(){
         $.ajax({
-            "url": "http://127.0.0.1:5000/bookings",
+            "url": host + "/bookings",
             "method":"GET",
             "data":"",
             "dataType": "JSON",
@@ -259,7 +260,7 @@
     function createBookingAjax(booking){
         console.log(JSON.stringify(booking));
         $.ajax({
-            "url": "http://127.0.0.1:5000/bookings",
+            "url": host + "/bookings",
             "method":"POST",
             "data":JSON.stringify(booking),
             "dataType": "JSON",
@@ -283,7 +284,7 @@
        
         console.log(JSON.stringify(booking));
         $.ajax({
-            "url": "http://127.0.0.1:5000/bookings/"+encodeURI(booking.id),
+            "url": host + "/bookings/"+encodeURI(booking.id),
             "method":"PUT",
             "data":JSON.stringify(booking),
             "dataType": "JSON",
@@ -304,7 +305,7 @@
     function deleteBookingAjax(id){
         console.log(JSON.stringify(booking));
         $.ajax({
-            "url": "http://127.0.0.1:5000/bookings/"+encodeURI(id),
+            "url": host + "/bookings/"+encodeURI(id),
             "method":"DELETE",
             "data":"",
             "dataType": "JSON",
