@@ -21,6 +21,7 @@ class BookingsDAO:
     for result in results:
       returnArray.append(self.roomsDict(result))
     return returnArray
+    cursor.close()
 
   def findRoomByID(self, id):
     cursor = self.db.cursor()
@@ -29,26 +30,30 @@ class BookingsDAO:
     cursor.execute(sql, values) 
     result = cursor.fetchone() 
     return self.roomsDict(result)
+    cursor.close()
 
   def createRoom(self, values):
     cursor = self.db.cursor()
     sql="insert into rooms (name, colour) values (%s,%s)" 
     cursor.execute(sql, values)
     self.db.commit() 
-    return cursor.lastrowid  
+    return cursor.lastrowid
+    cursor.close()  
 
   def updateRoom(self, values):
     cursor = self.db.cursor()
     sql="update rooms set name= %s, colour=%s where id = %s" 
     cursor.execute(sql, values)
     self.db.commit()
+    cursor.close()
 
   def deleteRoom(self, id):
     cursor = self.db.cursor()
     sql="delete from rooms where id = %s"
     values = (id,) 
     cursor.execute(sql, values)
-    self.db.commit() 
+    self.db.commit()
+    cursor.close() 
 
   def getAllBookings(self):
     cursor = self.db.cursor() 
@@ -59,6 +64,7 @@ class BookingsDAO:
     for result in results:
       returnArray.append(self.bookingsDict(result))
     return returnArray
+    cursor.close()
 
   def findBookingsByID(self, id):
     cursor = self.db.cursor()
@@ -67,6 +73,7 @@ class BookingsDAO:
     cursor.execute(sql, values) 
     result = cursor.fetchone() 
     return self.bookingsDict(result)
+    cursor.close()
 
   def createBooking(self, values):
     cursor = self.db.cursor()
@@ -74,12 +81,14 @@ class BookingsDAO:
     cursor.execute(sql, values)
     self.db.commit() 
     return cursor.lastrowid  
+    cursor.close()
 
   def updateBooking(self, values):
     cursor = self.db.cursor()
     sql="update bookings set roomID= %s, dateRequired=%s, userName=%s, reason=%s where id = %s" 
     cursor.execute(sql, values)
     self.db.commit()
+    cursor.close()
 
   def deleteBooking(self, id):
     cursor = self.db.cursor()
@@ -87,6 +96,7 @@ class BookingsDAO:
     values = (id,) 
     cursor.execute(sql, values)
     self.db.commit()  
+    cursor.close()
 
   # convert rooms result to a dictionary
   def roomsDict(self,result):
