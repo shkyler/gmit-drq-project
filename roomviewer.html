@@ -219,8 +219,9 @@
         console.log(JSON.stringify(room))
         return room
     }
-    host = window.location.origin
+    
     function getAllAjax(){
+        host = window.location.origin
         $.ajax({
             "url": host + "/rooms",
             "method":"GET",
@@ -243,6 +244,7 @@
 
     }
     function createRoomAjax(room){
+        host = window.location.origin
         console.log(JSON.stringify(room));
         $.ajax({
             "url": host + "/rooms",
@@ -266,7 +268,7 @@
         });
     }
     function updateRoomAjax(room){
-       
+        host = window.location.origin
         console.log(JSON.stringify(room));
         $.ajax({
             "url": host + "/rooms/"+encodeURI(room.id),
@@ -286,6 +288,7 @@
         });
     }
     function deleteRoomAjax(id){
+        host = window.location.origin
         console.log(JSON.stringify(room));
         $.ajax({
             "url": host + "/rooms/"+encodeURI(id),
