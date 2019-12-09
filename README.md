@@ -15,7 +15,7 @@ The project is currently hosted live and can be viewed and tested by clicking <a
 
 The data for this project is stored and managed using a MySQL database. The database has two tables, one which maintains a register of the rooms, the other maintains a register of the bookings. The `rooms` table can be described as follows:
 
-<img src="img/descRooms.png">
+<img src="https://raw.githubusercontent.com/shkyler/gmit-drq-project/master/img/descRooms.png">
 
 The `rooms` table can be created in MySQL with the following query:
 
@@ -30,7 +30,7 @@ CREATE TABLE `rooms`
 ```
 The `bookings` table can be described as follows:
 
-<img src="img/descBookings.png">
+<img src="https://raw.githubusercontent.com/shkyler/gmit-drq-project/master/img/descBookings.png">
 
 The `bookings` table can be created in MySQL with the following query:
 
